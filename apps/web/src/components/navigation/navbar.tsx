@@ -14,8 +14,8 @@ export function Navbar() {
                 top-0
                 z-50
                 border-b
-                border-(--dpsm-border)
-                bg-(--dpsm-background)/95
+                border-border
+                bg-background/95
                 backdrop-blur
                 shadow-sm
             "
@@ -70,7 +70,7 @@ export function Navbar() {
                                     font-bold
                                     text-lg
                                     leading-tight
-                                    text-(--dpsm-primary)
+                                    text-foreground
                                 "
               >
                 DPSM Intranet
@@ -81,7 +81,7 @@ export function Navbar() {
                                     text-xs
                                     uppercase
                                     tracking-wider
-                                    text-(--dpsm-muted)
+                                    text-muted-foreground
                                 "
               >
                 Department of Public Service Modernisation
