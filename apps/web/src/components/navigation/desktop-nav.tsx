@@ -1,27 +1,72 @@
-// src/components/navigation/desktop-nav.tsx
+"use client";
 
 import Link from "next/link";
+
+import { usePathname } from "next/navigation";
+
+import { navigation } from "@/config/navigation";
+
 import { DepartmentDropdown } from "./department-dropdown";
 
 export function DesktopNav() {
+  const pathname = usePathname();
+
   return (
     <nav
       className="
                 hidden
-                md:flex
+                lg:flex
                 items-center
-                gap-6
+                gap-2
+                flex-1
+                justify-center
+                border-b-2
+                border-transparent
             "
     >
-      <Link href="/">Home</Link>
+      {navigation.map(item => {
+        const isActive =
+          item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
 
-      <Link href="/staff">Staff</Link>
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`
+                inline-flex
+                items-center
 
-      <Link href="/resources">Resources</Link>
+                px-4
+                py-2
 
-      <Link href="/news">News</Link>
+                text-lg
+                font-semibold
 
-      <Link href="/contact">Contact</Link>
+                rounded-md
+
+                border-b-2
+                transition-all
+
+                ${
+                  isActive
+                    ? `
+                            bg-[var(--dpsm-surface)]
+                            border-[var(--dpsm-accent)]
+                            text-[var(--dpsm-primary)]
+                          `
+                    : `
+                            border-transparent
+                            text-[var(--dpsm-text)]
+                            hover:bg-[var(--dpsm-surface)]
+                            hover:text-[var(--dpsm-primary)]
+                          `
+                }
+            `}
+          >
+            {item.label}
+          </Link>
+        );
+      })}
 
       <DepartmentDropdown />
     </nav>

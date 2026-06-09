@@ -4,6 +4,50 @@
 
 @custom-variant dark (&:is(.dark *));
 
+:root {
+  --dpsm-primary: #0b2a63;
+
+  --dpsm-accent: #f0b323;
+
+  --dpsm-background: #ffffff;
+
+  --dpsm-surface: #f8fafc;
+
+  --dpsm-border: #e5e7eb;
+
+  --dpsm-text: #111827;
+
+  --dpsm-muted: #6b7280;
+
+  --dpsm-success: #16a34a;
+
+  --dpsm-warning: #f59e0b;
+
+  --dpsm-danger: #dc2626;
+}
+
+[data-theme="dark"] {
+  --dpsm-primary: #7aa2ff;
+
+  --dpsm-accent: #f0b323;
+
+  --dpsm-background: #0f172a;
+
+  --dpsm-surface: #1e293b;
+
+  --dpsm-border: #334155;
+
+  --dpsm-text: #f8fafc;
+
+  --dpsm-muted: #94a3b8;
+
+  --dpsm-success: #22c55e;
+
+  --dpsm-warning: #fbbf24;
+
+  --dpsm-danger: #ef4444;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
