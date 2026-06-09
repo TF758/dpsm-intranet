@@ -21,13 +21,6 @@ export function StaffGrid({ staff }: Props) {
       {staff.map(member => (
         <>
           <StaffCard key={member.id} staff={member} />
-          <StaffCard key={member.id} staff={member} />
-          <StaffCard key={member.id} staff={member} />
-          <StaffCard key={member.id} staff={member} />
-          <StaffCard key={member.id} staff={member} />
-          <StaffCard key={member.id} staff={member} />
-          <StaffCard key={member.id} staff={member} />
-          <StaffCard key={member.id} staff={member} />
         </>
       ))}
     </div>
