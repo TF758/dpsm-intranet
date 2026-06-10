@@ -90,12 +90,12 @@ export function ResourceCard({ resource }: ResourceCardProps) {
         </div>
 
         <div className="flex-1 space-y-3">
-          <h3 className="line-clamp-2 text-lg font-semibold leading-tight">
+          <h3 className="line-clamp-2 text-xl font-semibold leading-tight">
             {resource.title}
           </h3>
 
           {resource.description && (
-            <p className="line-clamp-3 text-sm text-muted-foreground">
+            <p className="line-clamp-3 text-md text-muted-foreground">
               {resource.description}
             </p>
           )}
