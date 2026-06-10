@@ -1,6 +1,6 @@
 import { Department } from "./department";
 
-export type ResourceType = "pdf" | "word" | "excel" | "powerpoint" | "link";
+export type resource_type = "pdf" | "word" | "excel" | "powerpoint" | "link";
 
 export interface Resource {
   id: string;
@@ -11,9 +11,9 @@ export interface Resource {
 
   department: Department;
 
-  resourceType: ResourceType;
+  resource_type: resource_type;
 
-  resourceFile: string;
+  resource_file: string;
 
   featured: boolean;
 
