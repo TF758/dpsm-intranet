@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { Pin } from "lucide-react";
+import { Newspaper, Pin } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -21,21 +21,38 @@ export function NewsCard({ news }: NewsCardProps) {
 
   return (
     <Link href={`/news/${news.id}`}>
-      <Card className="h-full overflow-hidden transition-all hover:-translate-y-1 hover:shadow-lg">
-        {imageUrl && (
-          <div className="relative aspect-[16/9]">
+      <Card
+        className="
+          h-full
+          overflow-hidden
+      
+          transition-all
+          duration-200
+          hover:-translate-y-1
+          hover:shadow-lg
+        "
+      >
+        <div className="relative h-60 overflow-hidden border-b bg-muted">
+          {imageUrl ? (
             <Image
               src={imageUrl}
               alt={news.title}
               fill
               unoptimized
-              className="object-cover"
+              className="object-cover transition-transform duration-300 hover:scale-105"
             />
-          </div>
-        )}
+          ) : (
+            <div className="flex h-full flex-col items-center justify-center gap-2">
+              <Newspaper className="h-8 w-8 text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">
+                No image available
+              </span>
+            </div>
+          )}
+        </div>
 
-        <CardContent className="space-y-3 p-4">
-          <div className="flex flex-wrap gap-2">
+        <CardContent className="flex h-[calc(100%-9rem)] flex-col p-5">
+          <div className="mb-3 flex flex-wrap gap-2">
             {news.type && <Badge variant="secondary">{news.type}</Badge>}
 
             {news.pinned && (
@@ -46,16 +63,24 @@ export function NewsCard({ news }: NewsCardProps) {
             )}
           </div>
 
-          <h3 className="line-clamp-2 font-semibold">{news.title}</h3>
+          <div className="space-y-3">
+            <h3 className="line-clamp-2 text-xl font-semibold leading-tight">
+              {news.title}
+            </h3>
 
-          <p className="line-clamp-3 text-sm text-muted-foreground">
-            {news.summary}
-          </p>
+            <p className="line-clamp-3 text-base text-muted-foreground">
+              {news.summary}
+            </p>
+          </div>
 
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span>{news.department?.name}</span>
+          <div className="mt-auto border-t pt-4">
+            <div className="flex items-center justify-between text-sm text-muted-foreground">
+              <span className="truncate">{news.department?.name}</span>
 
-            {news.date_created && <span>{formatDate(news.date_created)}</span>}
+              {news.date_created && (
+                <span>{formatDate(news.date_created)}</span>
+              )}
+            </div>
           </div>
         </CardContent>
       </Card>
