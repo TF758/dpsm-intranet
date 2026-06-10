@@ -8,11 +8,17 @@ export interface News {
   id: string;
   title: string;
   summary: string;
+  content: string;
+
   featured_image?: string;
+
   department: Department;
+
   type?: NewsType;
+
   pinned?: boolean;
   featured?: boolean;
+
   expiry_date?: string;
   external_link?: string;
 

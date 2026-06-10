@@ -90,3 +90,13 @@ export async function getPinnedNews(): Promise<News[]> {
     return [];
   }
 }
+
+export async function getRelatedNews(
+  departmentCode: string,
+  currentId: string,
+  limit = 3,
+): Promise<News[]> {
+  const news = await getNewsByDepartmentCode(departmentCode);
+
+  return news.filter(article => article.id !== currentId).slice(0, limit);
+}
