@@ -12,21 +12,32 @@ import {
 } from "@/components/ui/select";
 
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+
+import { Building2, Search, Users, X } from "lucide-react";
+
+import { Staff } from "@/types/staff";
 
 import { StaffGrid } from "./staff-grid";
-import { Staff } from "@/types/staff";
-import { Card, CardContent } from "../ui/card";
-import { Building2, Search, Users, X } from "lucide-react";
-import { Badge } from "../ui/badge";
 
 interface StaffDirectoryProps {
   staff: Staff[];
+
+  showDepartmentFilter?: boolean;
+  showUnitFilter?: boolean;
 }
 
-export function StaffDirectory({ staff }: StaffDirectoryProps) {
+export function StaffDirectory({
+  staff,
+  showDepartmentFilter = true,
+  showUnitFilter = true,
+}: StaffDirectoryProps) {
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
+
   const [department, setDepartment] = useState("all");
+
   const [unit, setUnit] = useState("all");
 
   const normalizedSearch = search.trim().toLowerCase();
@@ -35,6 +46,16 @@ export function StaffDirectory({ staff }: StaffDirectoryProps) {
     const values = staff.map(member => member.department?.name).filter(Boolean);
 
     return [...new Set(values)];
+  }, [staff]);
+
+  const units = useMemo(() => {
+    return [
+      ...new Set(
+        staff
+          .map(member => member.unit)
+          .filter((unit): unit is string => typeof unit === "string"),
+      ),
+    ];
   }, [staff]);
 
   const filteredStaff = useMemo(() => {
@@ -48,52 +69,69 @@ export function StaffDirectory({ staff }: StaffDirectoryProps) {
         member.email?.toLowerCase().includes(normalizedSearch);
 
       const matchesDepartment =
-        department === "all" || member.department?.name === department;
+        !showDepartmentFilter ||
+        department === "all" ||
+        member.department?.name === department;
 
-      const matchesUnit = unit === "all" || member.unit === unit;
+      const matchesUnit =
+        !showUnitFilter || unit === "all" || member.unit === unit;
 
       return matchesSearch && matchesDepartment && matchesUnit;
     });
-  }, [staff, search, department, unit]);
+  }, [
+    staff,
+    normalizedSearch,
+    department,
+    unit,
+    showDepartmentFilter,
+    showUnitFilter,
+  ]);
 
   const clearFilters = () => {
     setSearch("");
     setSearchInput("");
-    setDepartment("all");
-    setUnit("all");
+
+    if (showDepartmentFilter) {
+      setDepartment("all");
+    }
+
+    if (showUnitFilter) {
+      setUnit("all");
+    }
   };
 
-  const units = useMemo(() => {
-    return [
-      ...new Set(
-        staff
-          .map(member => member.unit)
-          .filter((unit): unit is string => typeof unit === "string"),
-      ),
-    ];
-  }, [staff]);
+  const activeFilterCount = [
+    search && "search",
+
+    showDepartmentFilter && department !== "all" && "department",
+
+    showUnitFilter && unit !== "all" && "unit",
+  ].filter(Boolean).length;
 
   return (
     <div className="space-y-8">
-      {/* Filters */}
       <Card>
-        <CardContent className="p-6 space-y-6">
+        <CardContent className="space-y-6 p-6">
           <div className="grid gap-4 lg:grid-cols-12">
             {/* Search */}
 
-            <div className="lg:col-span-6">
+            <div
+              className={
+                showDepartmentFilter ? "lg:col-span-6" : "lg:col-span-8"
+              }
+            >
               <div className="flex gap-2">
                 <div className="relative flex-1">
                   <Search
                     className="
-                absolute
-                left-3
-                top-1/2
-                h-4
-                w-4
-                -translate-y-1/2
-                text-muted-foreground
-              "
+                      absolute
+                      left-3
+                      top-1/2
+                      h-4
+                      w-4
+                      -translate-y-1/2
+                      text-muted-foreground
+                    "
                   />
 
                   <Input
@@ -118,45 +156,55 @@ export function StaffDirectory({ staff }: StaffDirectoryProps) {
 
             {/* Department */}
 
-            <div className="lg:col-span-3">
-              <Select value={department} onValueChange={setDepartment}>
-                <SelectTrigger>
-                  <Building2 className="mr-2 h-4 w-4" />
-                  <SelectValue placeholder="Department" />
-                </SelectTrigger>
+            {showDepartmentFilter && (
+              <div className="lg:col-span-3">
+                <Select value={department} onValueChange={setDepartment}>
+                  <SelectTrigger>
+                    <Building2 className="mr-2 h-4 w-4" />
 
-                <SelectContent>
-                  <SelectItem value="all">All Departments</SelectItem>
+                    <SelectValue placeholder="Department" />
+                  </SelectTrigger>
 
-                  {departments.map(dept => (
-                    <SelectItem key={dept} value={dept}>
-                      {dept}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+                  <SelectContent>
+                    <SelectItem value="all">All Departments</SelectItem>
+
+                    {departments.map(dept => (
+                      <SelectItem key={dept} value={dept}>
+                        {dept}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
 
             {/* Unit */}
 
-            <div className="lg:col-span-3">
-              <Select value={unit} onValueChange={setUnit}>
-                <SelectTrigger>
-                  <Users className="mr-2 h-4 w-4" />
-                  <SelectValue placeholder="Unit" />
-                </SelectTrigger>
+            {showUnitFilter && (
+              <div
+                className={
+                  showDepartmentFilter ? "lg:col-span-3" : "lg:col-span-4"
+                }
+              >
+                <Select value={unit} onValueChange={setUnit}>
+                  <SelectTrigger>
+                    <Users className="mr-2 h-4 w-4" />
 
-                <SelectContent>
-                  <SelectItem value="all">All Units</SelectItem>
+                    <SelectValue placeholder="Unit" />
+                  </SelectTrigger>
 
-                  {units.map(item => (
-                    <SelectItem key={item} value={item}>
-                      {item}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+                  <SelectContent>
+                    <SelectItem value="all">All Units</SelectItem>
+
+                    {units.map(item => (
+                      <SelectItem key={item} value={item}>
+                        {item}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
           </div>
 
           {/* Active Filters */}
@@ -179,7 +227,7 @@ export function StaffDirectory({ staff }: StaffDirectoryProps) {
                 </Badge>
               )}
 
-              {department !== "all" && (
+              {showDepartmentFilter && department !== "all" && (
                 <Badge variant="secondary" className="gap-1 pr-1">
                   {department}
 
@@ -193,7 +241,7 @@ export function StaffDirectory({ staff }: StaffDirectoryProps) {
                 </Badge>
               )}
 
-              {unit !== "all" && (
+              {showUnitFilter && unit !== "all" && (
                 <Badge variant="secondary" className="gap-1 pr-1">
                   {unit}
 
@@ -210,17 +258,19 @@ export function StaffDirectory({ staff }: StaffDirectoryProps) {
 
             {/* Results Summary */}
 
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div
+              className="
+                flex
+                flex-col
+                gap-4
+                md:flex-row
+                md:items-center
+                md:justify-between
+              "
+            >
               <div className="flex flex-wrap items-center gap-2">
                 <Badge variant="outline">
-                  {
-                    [
-                      search && "search",
-                      department !== "all" && "department",
-                      unit !== "all" && "unit",
-                    ].filter(Boolean).length
-                  }{" "}
-                  active filters
+                  {activeFilterCount} active filters
                 </Badge>
 
                 <Badge variant="secondary">{filteredStaff.length}</Badge>
@@ -240,6 +290,7 @@ export function StaffDirectory({ staff }: StaffDirectoryProps) {
       </Card>
 
       {/* Results */}
+
       {filteredStaff.length > 0 ? (
         <StaffGrid staff={filteredStaff} />
       ) : (

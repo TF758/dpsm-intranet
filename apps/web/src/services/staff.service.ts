@@ -33,3 +33,21 @@ export async function getStaff(): Promise<Staff[]> {
     return [];
   }
 }
+
+// services/staff.service.ts
+
+export async function getStaffByDepartment(
+  departmentId: string,
+): Promise<Staff[]> {
+  const staff = await getStaff();
+
+  return staff.filter(member => member.department?.id === departmentId);
+}
+
+export async function getStaffByDepartmentCode(
+  departmentCode: string,
+): Promise<Staff[]> {
+  const staff = await getStaff();
+
+  return staff.filter(member => member.department?.code === departmentCode);
+}
