@@ -6,17 +6,21 @@ import {
   Presentation,
   LinkIcon,
   Star,
+  Download,
+  Eye,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Resource } from "@/types/resource";
-import { cn } from "@/lib/utils";
+import { cn, getResourceUrl, isPreviewable } from "@/lib/utils";
 
 interface ResourceCardProps {
   resource: Resource;
 }
 
 export function ResourceCard({ resource }: ResourceCardProps) {
+  const fileUrl = getResourceUrl(resource.resource_file);
+
   const getIcon = () => {
     switch (resource.resource_type) {
       case "pdf":
@@ -111,23 +115,57 @@ export function ResourceCard({ resource }: ResourceCardProps) {
           </Badge>
         </div>
 
-        <div className="mt-5 border-t pt-4">
-          <Link
-            href={resource.resource_file}
-            target="_blank"
-            rel="noopener noreferrer"
+        <div className="mt-5 flex items-center gap-4 border-t pt-4">
+          {isPreviewable(resource.resource_type) ? (
+            <Link
+              href={fileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+        inline-flex
+        items-center
+        gap-2
+        text-sm
+        font-medium
+        text-primary
+      "
+            >
+              <Eye className="h-4 w-4" />
+              Preview
+            </Link>
+          ) : (
+            <Link
+              href={fileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="
+        inline-flex
+        items-center
+        gap-2
+        text-sm
+        font-medium
+        text-primary
+      "
+            >
+              Open
+            </Link>
+          )}
+
+          <a
+            href={fileUrl}
+            download
             className="
-              inline-flex
-              items-center
-              text-sm
-              font-medium
-              text-primary
-              transition-colors
-              hover:underline
-            "
+      inline-flex
+      items-center
+      gap-2
+      text-sm
+      text-muted-foreground
+      hover:text-primary
+    "
           >
-            Open Resource →
-          </Link>
+            <Download className="h-4 w-4" />
+            Download
+          </a>
         </div>
       </CardContent>
     </Card>
