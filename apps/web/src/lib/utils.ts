@@ -12,3 +12,11 @@ export function getResourceUrl(fileId: string) {
 export function isPreviewable(type?: string) {
   return ["pdf"].includes(type ?? "");
 }
+
+// src/lib/directus-assets.ts
+
+export function getAssetUrl(fileId?: string | null) {
+  if (!fileId) return null;
+
+  return `${process.env.NEXT_PUBLIC_DIRECTUS_URL}/assets/${fileId}`;
+}

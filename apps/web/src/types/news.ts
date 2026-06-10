@@ -2,28 +2,22 @@
 
 import { Department } from "./department";
 
-export type NewsPriority = "normal" | "important" | "urgent";
-
-export type NewsType =
-  | "announcement"
-  | "department_update"
-  | "campaign_update"
-  | "event_notice"
-  | "achievement"
-  | "general_news";
+export type NewsType = "announcement" | "notice" | "update" | "general";
 
 export interface News {
   id: string;
   title: string;
-  excerpt?: string;
-  content?: string;
-  featuredImage?: string;
+  summary: string;
+  featured_image?: string;
   department: Department;
-  type: NewsType;
-  priority: NewsPriority;
-  featured?: boolean;
+  type?: NewsType;
   pinned?: boolean;
-  expiryDate?: string;
-  externalLink?: string;
-  publishedAt?: string;
+  featured?: boolean;
+  expiry_date?: string;
+  external_link?: string;
+
+  user_created?: string;
+  user_updated?: string;
+  date_created?: string;
+  date_updated?: string;
 }
