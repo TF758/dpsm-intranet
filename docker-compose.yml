@@ -3,35 +3,44 @@ services:
     image: postgres:17
     container_name: dpsm-postgres
     restart: unless-stopped
+
     environment:
-      POSTGRES_DB: dpsm
-      POSTGRES_USER: dpsm
-      POSTGRES_PASSWORD: dpsm
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
     ports:
       - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   directus:
     image: directus/directus:latest
     container_name: dpsm-directus
     restart: unless-stopped
+
     ports:
       - "8055:8055"
+
     environment:
-      SECRET: change-this-long-random-secret
-      ADMIN_EMAIL: your-new-admin@work.com
-      ADMIN_PASSWORD: change-this-password
+      SECRET: ${DIRECTUS_SECRET}
+
+      ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD}
 
       DB_CLIENT: pg
       DB_HOST: postgres
       DB_PORT: 5432
-      DB_DATABASE: dpsm
-      DB_USER: dpsm
-      DB_PASSWORD: dpsm
+
+      DB_DATABASE: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+
     volumes:
       - ./uploads:/directus/uploads
       - ./extensions:/directus/extensions
+
     depends_on:
       - postgres
 
