@@ -24,11 +24,9 @@ npx directus schema apply /directus/schema.yaml --yes
 
 Write-Host "Restoring uploads..."
 
-New-Item -ItemType Directory -Force -Path ".\uploads" | Out-Null
+robocopy "$BackupDir\uploads" ".\uploads" /E
 
-Copy-Item `    "$BackupDir/uploads/*"`
-".\uploads" `    -Recurse`
--Force
+Write-Host "Uploads restored."
 
 Write-Host "Restarting Directus..."
 
